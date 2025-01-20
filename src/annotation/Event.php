@@ -2,8 +2,8 @@
 
 namespace luoyue\WebmanMvcAnnotationLibrary\annotation;
 
-use app\annotation\parser\EventParser;
 use LinFly\Annotation\AbstractAnnotationAttribute;
+use luoyue\WebmanMvcAnnotationLibrary\annotation\parser\EventParser;
 
 #[\Attribute(\Attribute::TARGET_METHOD)]
 class Event extends AbstractAnnotationAttribute

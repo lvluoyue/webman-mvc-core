@@ -14,5 +14,7 @@
             "email": "1569097443@qq.com"
         }
     ],
-    "require": {}
+    "require": {
+        "php": "^8.0"
+    }
 }

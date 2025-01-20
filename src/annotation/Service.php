@@ -2,8 +2,8 @@
 
 namespace luoyue\WebmanMvcAnnotationLibrary\annotation;
 
-use app\annotation\parser\ServiceParser;
 use LinFly\Annotation\AbstractAnnotationAttribute;
+use luoyue\WebmanMvcAnnotationLibrary\annotation\parser\ServiceParser;
 
 /**
  * Service注解
