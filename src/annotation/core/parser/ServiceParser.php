@@ -1,6 +1,6 @@
 <?php
 
-namespace luoyue\WebmanMvcAnnotationLibrary\annotation\parser;
+namespace Luoyue\WebmanMvcCore\annotation\core\parser;
 
 use LinFly\Annotation\Contracts\IAnnotationParser;
 use ReflectionClass;

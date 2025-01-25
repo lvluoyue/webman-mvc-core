@@ -1,9 +1,9 @@
 <?php
 
-namespace luoyue\WebmanMvcAnnotationLibrary\annotation;
+namespace Luoyue\WebmanMvcCore\annotation\core;
 
 use LinFly\Annotation\AbstractAnnotationAttribute;
-use luoyue\WebmanMvcAnnotationLibrary\annotation\parser\BeanParser;
+use Luoyue\WebmanMvcCore\annotation\core\parser\BeanParser;
 
 #[\Attribute(\Attribute::TARGET_METHOD)]
 class Bean extends AbstractAnnotationAttribute

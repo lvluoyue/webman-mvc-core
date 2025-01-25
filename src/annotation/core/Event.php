@@ -1,9 +1,9 @@
 <?php
 
-namespace luoyue\WebmanMvcAnnotationLibrary\annotation;
+namespace Luoyue\WebmanMvcCore\annotation\core;
 
 use LinFly\Annotation\AbstractAnnotationAttribute;
-use luoyue\WebmanMvcAnnotationLibrary\annotation\parser\EventParser;
+use Luoyue\WebmanMvcCore\annotation\core\parser\EventParser;
 
 #[\Attribute(\Attribute::TARGET_METHOD)]
 class Event extends AbstractAnnotationAttribute

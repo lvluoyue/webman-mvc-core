@@ -1,9 +1,9 @@
 <?php
 
-namespace luoyue\WebmanMvcAnnotationLibrary\annotation;
+namespace Luoyue\WebmanMvcCore\annotation\core;
 
 use LinFly\Annotation\AbstractAnnotationAttribute;
-use luoyue\WebmanMvcAnnotationLibrary\annotation\parser\ServiceParser;
+use Luoyue\WebmanMvcCore\annotation\core\parser\ServiceParser;
 
 /**
  * Service注解
