@@ -6,6 +6,8 @@ use Casbin\WebmanPermission\Permission;
 use Luoyue\WebmanMvcCore\annotation\authentication\Anonymous;
 use Luoyue\WebmanMvcCore\annotation\authorization\hasRole;
 use Luoyue\WebmanMvcCore\exception\UserException;
+use Luoyue\WebmanMvcCore\interface\UserDetailsService;
+use support\Container;
 use Webman\Context;
 use Webman\Http\Request;
 use Webman\Http\Response;
@@ -20,16 +22,18 @@ class HasRoleMiddleware implements MiddlewareInterface
         if($reflectionMethod->getAttributes(Anonymous::class)) {
             return $handler($request);
         }
-        $user = Context::get('user');
-        if(!$user || !is_string($user)) {
-            throw new UserException('user is not User');
+        /** @var UserDetailsService $service */
+        $service = Container::get(UserDetailsService::class);
+        $userId = $service->getUser()?->getId();
+        if (!$userId) {
+            throw new UserException('not User');
         }
         $hasRoleAttributes = $reflectionMethod->getAttributes(hasRole::class);
         if($hasRoleAttributes) {
             foreach ($hasRoleAttributes as $hasRoleAttribute) {
                 /** @var hasRole $hasRole */
                 $hasRole = $hasRoleAttribute->newInstance();
-                if(!Permission::hasRoleForUser($user, $hasRole->role)) {
+                if(!Permission::hasRoleForUser((string)$userId, $hasRole->role)) {
                     return response('您没有权限访问', 403);
                 }
             }
