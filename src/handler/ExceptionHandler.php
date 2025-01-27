@@ -39,9 +39,10 @@ class ExceptionHandler implements ExceptionHandlerInterface
      */
     public function report(Throwable $exception)
     {
-        $exceptionHandler = ExceptionHandlerParser::getException(get_class($exception));
-        if($exceptionHandler && !$exceptionHandler[2]) {
-            return;
+        foreach (ExceptionHandlerParser::getExceptions() as $exceptionClass => $exceptionHandler) {
+            if ($exception instanceof $exceptionClass && !$exceptionHandler[2]) {
+                return;
+            }
         }
         $logs = '';
         if ($request = \request()) {
