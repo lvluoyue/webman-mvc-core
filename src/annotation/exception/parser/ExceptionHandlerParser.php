@@ -29,11 +29,8 @@ class ExceptionHandlerParser implements IAnnotationParser
         ];
     }
 
-    public static function getException(?string $exceptionClass = null): array
+    public static function getExceptions(): array
     {
-        if ($exceptionClass) {
-            return self::$exceptions[$exceptionClass] ?? [];
-        }
         return self::$exceptions;
     }
 }

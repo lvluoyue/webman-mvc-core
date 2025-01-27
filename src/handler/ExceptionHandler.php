@@ -60,19 +60,12 @@ class ExceptionHandler implements ExceptionHandlerInterface
         if (method_exists($exception, 'render') && ($response = $exception->render($request))) {
             return $response;
         }
-        $c = \Exception::class;
-        foreach (ExceptionHandlerParser::getException() as $exceptionClass => $exceptionHandler) {
+        foreach (ExceptionHandlerParser::getExceptions() as $exceptionClass => $exceptionHandler) {
             if ($exception instanceof $exceptionClass) {
                 [$handlerClass, $handlerMethod] = $exceptionHandler;
                 return Container::get($handlerClass)->{$handlerMethod}($request, $exception);
             }
         }
-//        $exceptionHandler = ExceptionHandlerParser::getException(get_class($exception));
-//        print_r(get_class($exception));
-//        if ($exceptionHandler) {
-//            [$handlerClass, $handlerMethod] = $exceptionHandler;
-//            return Container::get($handlerClass)->{$handlerMethod}($request, $exception);
-//        }
         $code = $exception->getCode();
         if ($request->expectsJson()) {
             $json = ['code' => $code ?: 500, 'msg' => $this->debug ? $exception->getMessage() : 'Server internal error'];
