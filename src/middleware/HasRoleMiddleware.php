@@ -8,7 +8,6 @@ use Luoyue\WebmanMvcCore\annotation\authorization\hasRole;
 use Luoyue\WebmanMvcCore\exception\UserException;
 use Luoyue\WebmanMvcCore\interface\UserDetailsService;
 use support\Container;
-use Webman\Context;
 use Webman\Http\Request;
 use Webman\Http\Response;
 use Webman\MiddlewareInterface;
@@ -31,9 +30,8 @@ class HasRoleMiddleware implements MiddlewareInterface
         $hasRoleAttributes = $reflectionMethod->getAttributes(hasRole::class);
         if($hasRoleAttributes) {
             foreach ($hasRoleAttributes as $hasRoleAttribute) {
-                /** @var hasRole $hasRole */
-                $hasRole = $hasRoleAttribute->newInstance();
-                if(!Permission::hasRoleForUser((string)$userId, $hasRole->role)) {
+                $role = $hasRoleAttribute->getArguments()[0];
+                if(!Permission::hasRoleForUser((string)$userId, $role)) {
                     return response('您没有权限访问', 403);
                 }
             }

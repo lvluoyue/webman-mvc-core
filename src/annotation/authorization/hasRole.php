@@ -7,8 +7,11 @@ class hasRole
 {
 
 
-    public function __construct(public string $role)
+    public function __construct(string $role)
     {
+        if (empty($role)) {
+            throw new \InvalidArgumentException('permissions is empty');
+        }
     }
 
 }

@@ -6,11 +6,11 @@ namespace Luoyue\WebmanMvcCore\annotation\authorization;
 class hasPermi
 {
 
-    public array $permissions;
-
     public function __construct(string $permissions)
     {
-        $this->permissions = explode(':', $permissions);
+        if (empty($permissions)) {
+            throw new \InvalidArgumentException('permissions is empty');
+        }
     }
 
 }
