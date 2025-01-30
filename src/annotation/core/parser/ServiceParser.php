@@ -10,11 +10,11 @@ class ServiceParser implements IAnnotationParser
 {
     public static function process(array $item): void
     {
-        $reflectionClass = new ReflectionClass($item['class']);
+        $interfaceNames = class_implements($item['class']);
         if ($name = $item['parameters']['name']) {
             self::addContainer($name, $item['class']);
         } else {
-            array_map(fn (string $interface) => self::addContainer($interface, $item['class']), $reflectionClass->getInterfaceNames());
+            array_map(fn (string $interface) => self::addContainer($interface, $item['class']), $interfaceNames);
         }
     }
 

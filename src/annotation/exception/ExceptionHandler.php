@@ -9,7 +9,7 @@ use Luoyue\WebmanMvcCore\annotation\exception\parser\ExceptionHandlerParser;
 class ExceptionHandler extends AbstractAnnotationAttribute
 {
 
-    public function __construct(string $exceptionClass, bool $reportLog = true)
+    public function __construct(string $exceptionClass, ?string $app = null, bool $reportLog = true)
     {
         $this->setArguments(func_get_args());
     }
