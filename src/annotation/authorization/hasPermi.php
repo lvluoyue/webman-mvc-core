@@ -6,7 +6,7 @@ namespace Luoyue\WebmanMvcCore\annotation\authorization;
 class hasPermi
 {
 
-    public function __construct(string $permissions)
+    public function __construct(string|array $permissions)
     {
         if (empty($permissions)) {
             throw new \InvalidArgumentException('permissions is empty');
