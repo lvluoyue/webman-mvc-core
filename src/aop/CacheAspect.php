@@ -33,8 +33,13 @@ class CacheAspect
     {
         $reflectionMethod = $proceedingJoinPoint->getClassName() . '::' . $proceedingJoinPoint->getMethodName();
         [$name, $key, $expire, $driver] = CachedParser::getParams($reflectionMethod);
+        $params = [
+            'className' => $proceedingJoinPoint->getClassName(),
+            'methodName' => $proceedingJoinPoint->getMethodName(),
+            'args' => $proceedingJoinPoint->getArguments()
+        ];
         return [
-            'key' => $name . '_' . $this->getParserKey($key, $proceedingJoinPoint->getArguments()),//缓存键
+            'key' => $name . '_' . $this->getParserKey($key, $params),//缓存键
             'expire' => $expire,// 过期时间
             'driver' => $driver,// 缓存驱动
         ];
