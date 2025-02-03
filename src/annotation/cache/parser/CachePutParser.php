@@ -8,7 +8,7 @@ use Luoyue\aop\Collects\node\AspectNode;
 use Luoyue\aop\enum\AdviceTypeEnum;
 use Luoyue\WebmanMvcCore\aop\CacheAspect;
 
-class CacheUpdateParser implements iAnnotationParser
+class CachePutParser implements iAnnotationParser
 {
 
     public static array $cachedParams = [];
@@ -23,14 +23,8 @@ class CacheUpdateParser implements iAnnotationParser
             'cachedReturning',
             AdviceTypeEnum::AfterReturning,
             []);
-        $cachedBefore = $aspectCollects->getAspectNode($item['class'], 'cachedBefore') ?? new AspectNode(
-            CacheAspect::class,
-            'cachedBefore',
-            AdviceTypeEnum::Before,
-            []);
         $proxyCollects->getPointcutNode($item['class'])
-            ->addPointcutMethod($item['method'], $cachedReturning)
-            ->addPointcutMethod($item['method'], $cachedBefore);
+            ->addPointcutMethod($item['method'], $cachedReturning);
         Aspect::getInstance()->scan();
     }
 

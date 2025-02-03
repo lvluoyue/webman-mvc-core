@@ -3,18 +3,18 @@
 namespace Luoyue\WebmanMvcCore\annotation\cache;
 
 use LinFly\Annotation\AbstractAnnotationAttribute;
-use Luoyue\WebmanMvcCore\annotation\cache\parser\CachedParser;
+use Luoyue\WebmanMvcCore\annotation\cache\parser\CachePutParser;
 
 #[\Attribute(\Attribute::TARGET_METHOD)]
-class Cached extends AbstractAnnotationAttribute
+class CachePut extends AbstractAnnotationAttribute
 {
 
     /**
-     * 缓存方法返回值并尝试获取缓存
-     * @param string $name 缓存名称
-     * @param string|int $key 缓存key
-     * @param ?int $expire 过期时间，默认为env.CACHE_EXPIRE_DEFAULT
-     * @param string $driver 缓存驱动
+     * 方法无异常，则使用方法返回值放入到缓存中
+     * @param string $name
+     * @param string $key
+     * @param int|null $expire
+     * @param string $driver
      */
     public function __construct(string $name = '', string $key = '', ?int $expire = null, string $driver = '')
     {
@@ -23,7 +23,7 @@ class Cached extends AbstractAnnotationAttribute
 
     public static function getParser(): array|string
     {
-        return CachedParser::class;
+        return CachePutParser::class;
     }
 
 }

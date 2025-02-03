@@ -18,20 +18,14 @@ class CachedParser implements iAnnotationParser
         self::$cachedParams[$item['class'] . '::' . $item['method']] = array_values($item['parameters']);
         $aspectCollects = Aspect::getInstance()->getAspectCollects();
         $proxyCollects = Aspect::getInstance()->getProxyCollects();
-        $cachedReturning = $aspectCollects->getAspectNode($item['class'], 'cachedReturning') ?? new AspectNode(
-            CacheAspect::class,
-            'cachedReturning',
-            AdviceTypeEnum::AfterReturning,
-            []);
         $cachedBefore = $aspectCollects->getAspectNode($item['class'], 'cachedBefore') ?? new AspectNode(
             CacheAspect::class,
             'cachedBefore',
             AdviceTypeEnum::Before,
             []);
         $proxyCollects->getPointcutNode($item['class'])
-            ->addPointcutMethod($item['method'], $cachedReturning)
             ->addPointcutMethod($item['method'], $cachedBefore);
-        Aspect::getInstance()->scan();
+        CachePutParser::process($item);
     }
 
     public static function getParams(?string $sign = null): array

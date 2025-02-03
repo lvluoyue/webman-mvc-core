@@ -6,6 +6,10 @@ namespace Luoyue\WebmanMvcCore\annotation\authorization;
 class hasPermi
 {
 
+    /**
+     * 检查用户是否有某权限
+     * @param string|array $permissions 权限标识
+     */
     public function __construct(string|array $permissions)
     {
         if (empty($permissions)) {
