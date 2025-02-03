@@ -29,6 +29,7 @@ class ExceptionHandlerParser implements IAnnotationParser
         self::$exceptions[$item['parameters']['exceptionClass']] = [
             $item['class'],
             $item['method'],
+            $item['parameters']['app'],
             $item['parameters']['reportLog'],
         ];
     }
@@ -112,8 +113,4 @@ class ExceptionHandlerParser implements IAnnotationParser
         return $sortedExceptions;
     }
 
-//    public static function getExceptions(): array
-//    {
-//        return self::$exceptions;
-//    }
 }

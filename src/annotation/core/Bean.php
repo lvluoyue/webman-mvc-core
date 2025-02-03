@@ -8,7 +8,8 @@ use Luoyue\WebmanMvcCore\annotation\core\parser\BeanParser;
 #[\Attribute(\Attribute::TARGET_METHOD)]
 class Bean extends AbstractAnnotationAttribute
 {
-    public function __construct(string $name = '', string $requireClass = '')
+
+    public function __construct(string $name = '', ?string $requireClass = null)
     {
         $this->setArguments(\func_get_args());
     }

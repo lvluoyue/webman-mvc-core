@@ -2,6 +2,8 @@
 
 namespace Luoyue\WebmanMvcCore;
 
+use Luoyue\aop\Aspect;
+use Luoyue\WebmanMvcCore\aop\CacheAspect;
 use Webman\Bootstrap;
 use Workerman\Worker;
 

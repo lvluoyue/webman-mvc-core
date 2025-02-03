@@ -40,7 +40,8 @@ class ExceptionHandler implements ExceptionHandlerInterface
     public function report(Throwable $exception)
     {
         foreach (ExceptionHandlerParser::getExceptions() as $exceptionClass => $exceptionHandler) {
-            if ($exception instanceof $exceptionClass && !$exceptionHandler[2]) {
+            [$handlerClass, $handlerMethod, $app, $reportLog] = $exceptionHandler;
+            if ($exception instanceof $exceptionClass && !$reportLog) {
                 return;
             }
         }
@@ -63,8 +64,10 @@ class ExceptionHandler implements ExceptionHandlerInterface
         }
         foreach (ExceptionHandlerParser::getExceptions() as $exceptionClass => $exceptionHandler) {
             if ($exception instanceof $exceptionClass) {
-                [$handlerClass, $handlerMethod] = $exceptionHandler;
-                return Container::get($handlerClass)->{$handlerMethod}($request, $exception);
+                [$handlerClass, $handlerMethod, $app] = $exceptionHandler;
+                if ($app === null || $request->app == $app) {
+                    return Container::get($handlerClass)->{$handlerMethod}($request, $exception);
+                }
             }
         }
         $code = $exception->getCode();

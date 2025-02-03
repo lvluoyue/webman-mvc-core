@@ -43,4 +43,10 @@ class SessionUserDetailsService implements UserDetailsService
         return $user;
     }
 
+    public function logout(): bool
+    {
+        request()->session()->flush();
+        return true;
+    }
+
 }
