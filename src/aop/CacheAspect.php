@@ -6,6 +6,7 @@ use Luoyue\aop\Attributes\AfterReturning;
 use Luoyue\aop\Attributes\Before;
 use Luoyue\aop\interfaces\ProceedingJoinPointInterface;
 use Luoyue\WebmanMvcCore\annotation\cache\parser\CachedParser;
+use Luoyue\WebmanMvcCore\annotation\cache\parser\CacheInvalidateParser;
 use Luoyue\WebmanMvcCore\annotation\cache\parser\CachePutParser;
 use support\Cache;
 
@@ -30,19 +31,30 @@ class CacheAspect
         return null;
     }
 
+    #[AfterReturning('')]
+    public function cacheInvalidate($res, ProceedingJoinPointInterface $proceedingJoinPoint): mixed
+    {
+        $data = $this->getCacheData($proceedingJoinPoint, CacheInvalidateParser::class);
+        $cache = Cache::store($data['driver']);
+        if($cache->has($data['key'])) {
+            $cache->delete($data['key']);
+        }
+        return null;
+    }
+
     private function getCacheData(ProceedingJoinPointInterface $proceedingJoinPoint, string $handler): array
     {
         $reflectionMethod = $proceedingJoinPoint->getClassName() . '::' . $proceedingJoinPoint->getMethodName();
-        [$name, $key, $expire, $driver] = call_user_func([$handler, 'getParams'], $reflectionMethod);
+        $props = call_user_func([$handler, 'getParams'], $reflectionMethod);
         $params = [
             'className' => $proceedingJoinPoint->getClassName(),
             'methodName' => $proceedingJoinPoint->getMethodName(),
             'args' => $proceedingJoinPoint->getArguments()
         ];
         return [
-            'key' => $name . '_' . $this->getParserKey($key, $params),//缓存键
-            'expire' => $expire ?? (int)getenv('CACHE_EXPIRE_DEFAULT'),// 过期时间
-            'driver' => $driver,// 缓存驱动
+            'key' => $props['name'] . '_' . $this->getParserKey($props['key'], $params),//缓存键
+            'expire' => $props['expire'] ?? (int)getenv('CACHE_EXPIRE_DEFAULT'),// 过期时间
+            'driver' => $props['driver'],// 缓存驱动
         ];
     }
 
