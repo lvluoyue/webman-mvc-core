@@ -18,7 +18,7 @@ class CachePutParser implements iAnnotationParser
         self::$cachedParams[$item['class'] . '::' . $item['method']] = $item['parameters'];
         $aspectCollects = Aspect::getInstance()->getAspectCollects();
         $proxyCollects = Aspect::getInstance()->getProxyCollects();
-        $cachedReturning = $aspectCollects->getAspectNode($item['class'], 'cachedReturning') ?? new AspectNode(
+        $cachedReturning = $aspectCollects->getAspectNode(CacheAspect::class, 'cachedReturning') ?? new AspectNode(
             CacheAspect::class,
             'cachedReturning',
             AdviceTypeEnum::AfterReturning,

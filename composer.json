@@ -23,7 +23,8 @@
         "casbin/webman-permission": "^2.0",
         "webman/event": "^1.0",
         "luoyue/webman-aop": "^2.0||*",
-        "symfony/cache": "7.3.x-dev"
+        "symfony/cache": "7.3.x-dev",
+        "illuminate/database": "^12.0@dev"
     },
     "minimum-stability": "dev",
     "repositories": {

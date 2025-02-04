@@ -64,9 +64,14 @@ class ExceptionHandler implements ExceptionHandlerInterface
         }
         foreach (ExceptionHandlerParser::getExceptions() as $exceptionClass => $exceptionHandler) {
             if ($exception instanceof $exceptionClass) {
-                [$handlerClass, $handlerMethod, $app] = $exceptionHandler;
-                if ($app === null || $request->app == $app) {
+                [$handlerClass, $handlerMethod, $apps] = $exceptionHandler;
+                if (empty($apps)) {
                     return Container::get($handlerClass)->{$handlerMethod}($request, $exception);
+                }
+                foreach ((array) $apps as $app) {
+                    if($request->app == $app) {
+                        return Container::get($handlerClass)->{$handlerMethod}($request, $exception);
+                    }
                 }
             }
         }

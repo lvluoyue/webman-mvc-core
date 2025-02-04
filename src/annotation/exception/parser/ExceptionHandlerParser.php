@@ -15,23 +15,25 @@ class ExceptionHandlerParser implements IAnnotationParser
 
     public static function process(array $item): void
     {
-        $reflectionClass = new ReflectionClass($item['parameters']['exceptionClass']);
-        if (!$reflectionClass->isSubclassOf(Throwable::class)) {
-            throw new \InvalidArgumentException('Exception class must be a subclass of Throwable');
+        foreach ((array)$item['parameters']['exceptionClass'] as $exceptionClass) {
+            $reflectionClass = new ReflectionClass($exceptionClass);
+            if (!$reflectionClass->isSubclassOf(Throwable::class)) {
+                throw new \InvalidArgumentException('Exception class must be a subclass of Throwable');
+            }
+            $reflectionMethod = new \ReflectionMethod($item['class'], $item['method']);
+            $returnName = $reflectionMethod->getReturnType()?->getName();
+            if($returnName !== \support\Response::class && $returnName !== \Webman\Http\Response::class) {
+                throw new \InvalidArgumentException('Exception handler must return Response');
+            }
+            self::$exceptionTree ??= new ExceptionTreeNode(Throwable::class);
+            self::addException($reflectionClass);
+            self::$exceptions[$exceptionClass] = [
+                $item['class'],
+                $item['method'],
+                $item['parameters']['app'],
+                $item['parameters']['reportLog'],
+            ];
         }
-        $reflectionMethod = new \ReflectionMethod($item['class'], $item['method']);
-        $returnName = $reflectionMethod->getReturnType()?->getName();
-        if($returnName !== \support\Response::class && $returnName !== \Webman\Http\Response::class) {
-            throw new \InvalidArgumentException('Exception handler must return Response');
-        }
-        self::$exceptionTree ??= new ExceptionTreeNode(Throwable::class);
-        self::addException($reflectionClass);
-        self::$exceptions[$item['parameters']['exceptionClass']] = [
-            $item['class'],
-            $item['method'],
-            $item['parameters']['app'],
-            $item['parameters']['reportLog'],
-        ];
     }
 
     private static function addException(?ReflectionClass $reflectionClass, ?ExceptionTreeNode $parentNode = null)

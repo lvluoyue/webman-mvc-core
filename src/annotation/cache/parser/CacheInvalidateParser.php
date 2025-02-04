@@ -18,7 +18,7 @@ class CacheInvalidateParser implements iAnnotationParser
         self::$cachedParams[$item['class'] . '::' . $item['method']] = $item['parameters'];
         $aspectCollects = Aspect::getInstance()->getAspectCollects();
         $proxyCollects = Aspect::getInstance()->getProxyCollects();
-        $cachedReturning = $aspectCollects->getAspectNode($item['class'], 'cacheInvalidate') ?? new AspectNode(
+        $cachedReturning = $aspectCollects->getAspectNode(CacheAspect::class, 'cacheInvalidate') ?? new AspectNode(
             CacheAspect::class,
             'cacheInvalidate',
             AdviceTypeEnum::AfterReturning,

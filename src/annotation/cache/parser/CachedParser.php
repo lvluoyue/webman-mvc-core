@@ -18,7 +18,7 @@ class CachedParser implements iAnnotationParser
         self::$cachedParams[$item['class'] . '::' . $item['method']] = $item['parameters'];
         $aspectCollects = Aspect::getInstance()->getAspectCollects();
         $proxyCollects = Aspect::getInstance()->getProxyCollects();
-        $cachedBefore = $aspectCollects->getAspectNode($item['class'], 'cachedBefore') ?? new AspectNode(
+        $cachedBefore = $aspectCollects->getAspectNode(CacheAspect::class, 'cachedBefore') ?? new AspectNode(
             CacheAspect::class,
             'cachedBefore',
             AdviceTypeEnum::Before,
