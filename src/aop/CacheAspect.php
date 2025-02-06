@@ -44,8 +44,8 @@ class CacheAspect
 
     private function getCacheData(ProceedingJoinPointInterface $proceedingJoinPoint, string $handler): array
     {
-        $reflectionMethod = $proceedingJoinPoint->getClassName() . '::' . $proceedingJoinPoint->getMethodName();
-        $props = call_user_func([$handler, 'getParams'], $reflectionMethod);
+        $sign = $proceedingJoinPoint->getClassName() . '::' . $proceedingJoinPoint->getMethodName();
+        $props = call_user_func([$handler, 'getParams'], $sign);
         $params = [
             'className' => $proceedingJoinPoint->getClassName(),
             'methodName' => $proceedingJoinPoint->getMethodName(),
