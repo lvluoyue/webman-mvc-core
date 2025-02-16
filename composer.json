@@ -24,7 +24,8 @@
         "webman/cache": "^2.1",
         "webman/database": "^2.1",
         "casbin/webman-permission": "^2.0",
-        "luoyue/webman-aop": "^2.0||*"
+        "luoyue/webman-aop": "^2.0||*",
+        "webman-tech/auth": "dev-main"
     },
     "minimum-stability": "dev",
     "repositories": {
