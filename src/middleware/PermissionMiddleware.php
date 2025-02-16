@@ -7,7 +7,6 @@ use Luoyue\WebmanMvcCore\annotation\authentication\Anonymous;
 use Luoyue\WebmanMvcCore\annotation\authorization\hasPermi;
 use Luoyue\WebmanMvcCore\annotation\authorization\hasRole;
 use Luoyue\WebmanMvcCore\exception\PermissionException;
-use Luoyue\WebmanMvcCore\exception\UserException;
 use ReflectionAttribute;
 use ReflectionMethod;
 use Webman\Http\Request;
@@ -29,34 +28,31 @@ class PermissionMiddleware extends \WebmanTech\Auth\Middleware\Authentication
         if (!$this->config['enable'] ?? true) {
             return $handler($request);
         }
-        $anonymous = $this->filterAnnotation($this->getAttributes(), Anonymous::class);
-        if ($anonymous) {
-            return $handler($request);
-        }
-
         $guard = $this->getGuard();
         $identity = $guard->getAuthenticationMethod()->authenticate($request);
         if ($identity instanceof IdentityInterface) {
             $guard->login($identity);
-            if ($this->hasPermission()) {
-                return $handler($request);
-            }else{
-                throw new PermissionException('permission denied');
-            }
         }
+
+        if ($this->filterAnnotation($this->getAttributes(), Anonymous::class)) {
+            return $handler($request);
+        }
+
         if ($this->isOptionalRoute($request)) {
             return $handler($request);
         }
 
+        if ($userId = $guard->getId()) {
+            if (!$this->hasPermission($userId)) {
+                throw new PermissionException('permission denied');
+            }
+            return $handler($request);
+        }
         return $guard->getAuthenticationFailedHandler()->handle($request);
     }
 
-    private function hasPermission(): bool
+    private function hasPermission(string $userId): bool
     {
-        $userId = (string)$this->getGuard()->getId();
-        if (!$userId) {
-            throw new UserException('user is not User');
-        }
         $attributes = $this->getAttributes();
         $hasPermiAttributes = $this->filterAnnotation($attributes, hasPermi::class);
         //遍历注解
