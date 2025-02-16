@@ -59,9 +59,6 @@ class ExceptionHandler implements ExceptionHandlerInterface
      */
     public function render(Request $request, Throwable $exception): Response
     {
-        if (method_exists($exception, 'render') && ($response = $exception->render($request))) {
-            return $response;
-        }
         foreach (ExceptionHandlerParser::getExceptions() as $exceptionClass => $exceptionHandler) {
             if ($exception instanceof $exceptionClass) {
                 [$handlerClass, $handlerMethod, $apps] = $exceptionHandler;
@@ -74,6 +71,9 @@ class ExceptionHandler implements ExceptionHandlerInterface
                     }
                 }
             }
+        }
+        if (method_exists($exception, 'render') && ($response = $exception->render($request))) {
+            return $response;
         }
         $code = $exception->getCode();
         if ($request->expectsJson()) {

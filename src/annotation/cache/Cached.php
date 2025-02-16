@@ -12,7 +12,7 @@ class Cached extends AbstractAnnotationAttribute
     /**
      * 缓存方法返回值并尝试获取缓存
      * @param string $name 缓存名称
-     * @param string|int $key 缓存key
+     * @param string $key 缓存key
      * @param ?int $expire 过期时间，默认为env.CACHE_EXPIRE_DEFAULT
      * @param string $driver 缓存驱动
      */
