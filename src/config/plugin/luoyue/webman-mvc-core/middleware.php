@@ -1,7 +1,9 @@
 <?php
 
-return [
-    "@" => [
-        \Luoyue\WebmanMvcCore\middleware\PermissionMiddleware::class
-    ]
-];
+$middleware = [];
+
+if (config('plugin.luoyue.webman-mvc-core.app.permission.enable')) {
+    $middleware[] = \Luoyue\WebmanMvcCore\middleware\PermissionMiddleware::class;
+}
+
+return ['@' => $middleware];

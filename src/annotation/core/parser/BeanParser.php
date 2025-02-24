@@ -10,7 +10,7 @@ class BeanParser implements IAnnotationParser
 {
     public static function process(array $item): void
     {
-        if (!$item['parameters']['requireClass'] && !class_exists($item['parameters']['requireClass'])) {
+        if ($item['parameters']['requireClass'] && !class_exists($item['parameters']['requireClass'])) {
             return;
         }
         $reflectionMethod = new ReflectionMethod($item['class'], $item['method']);
