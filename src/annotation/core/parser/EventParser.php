@@ -12,7 +12,7 @@ class EventParser implements IAnnotationParser
 
     public static function process(array $item): void
     {
-        self::$events[$item['parameters']['name']][] = [self::getCallable($item)];
+        self::$events[$item['parameters']['name']][] = [$item];
     }
 
     public static function EventHandler(): void
@@ -22,7 +22,7 @@ class EventParser implements IAnnotationParser
             ksort($events, \SORT_NATURAL);
             foreach ($events as $callbacks) {
                 foreach ($callbacks as $callback) {
-                    Event::on($name, $callback);
+                    Event::on($name, self::getCallable($callback));
                 }
             }
         }
