@@ -5,6 +5,7 @@ namespace Luoyue\WebmanMvcCore\handler;
 use Luoyue\WebmanMvcCore\annotation\exception\parser\ExceptionHandlerParser;
 use Psr\Log\LoggerInterface;
 use support\Container;
+use support\Log;
 use Throwable;
 use Webman\Exception\ExceptionHandlerInterface;
 use Webman\Http\Request;
@@ -40,8 +41,8 @@ class ExceptionHandler implements ExceptionHandlerInterface
     public function report(Throwable $exception)
     {
         foreach (ExceptionHandlerParser::getExceptions() as $exceptionClass => $exceptionHandler) {
-            [$handlerClass, $handlerMethod, $app, $reportLog] = $exceptionHandler;
-            if ($exception instanceof $exceptionClass && !$reportLog) {
+            [$handlerClass, $handlerMethod, $app, $logChannel] = $exceptionHandler;
+            if ($exception instanceof $exceptionClass && !$logChannel) {
                 return;
             }
         }
@@ -50,6 +51,9 @@ class ExceptionHandler implements ExceptionHandlerInterface
             $logs = $request->getRealIp() . ' ' . $request->method() . ' ' . trim($request->fullUrl(), '/');
         }
         $this->logger->error($logs . PHP_EOL . $exception);
+        if($logChannel) {
+            Log::channel($logChannel)->error($logs . PHP_EOL . $exception);
+        }
     }
 
     /**
