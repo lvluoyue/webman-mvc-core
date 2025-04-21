@@ -31,7 +31,7 @@ class ExceptionHandlerParser implements IAnnotationParser
                 $item['class'],
                 $item['method'],
                 $item['parameters']['app'],
-                $item['parameters']['reportLog'],
+                $item['parameters']['logChannel'],
             ];
         }
     }
