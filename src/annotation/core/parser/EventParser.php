@@ -8,25 +8,9 @@ use Webman\Event\Event;
 
 class EventParser implements IAnnotationParser
 {
-    private static array $events = [];
-
     public static function process(array $item): void
     {
-        self::$events[$item['parameters']['name']][] = [$item];
-    }
-
-    public static function EventHandler(): void
-    {
-        foreach (static::$events as $name => $events) {
-            // 支持排序，1 2 3 ... 9 a b c...z
-            ksort($events, \SORT_NATURAL);
-            foreach ($events as $callbacks) {
-                foreach ($callbacks as $callback) {
-                    Event::on($name, self::getCallable($callback));
-                }
-            }
-        }
-        self::recovery();
+        Event::on($item['parameters']['name'], self::getCallable($item));
     }
 
     private static function getCallable($item): array
@@ -34,8 +18,4 @@ class EventParser implements IAnnotationParser
         return [Container::get($item['class']), $item['method']];
     }
 
-    protected static function recovery(): void
-    {
-        self::$events = [];
-    }
 }
