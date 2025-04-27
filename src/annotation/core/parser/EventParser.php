@@ -13,9 +13,9 @@ class EventParser implements IAnnotationParser
         Event::on($item['parameters']['name'], self::getCallable($item));
     }
 
-    private static function getCallable($item): array
+    private static function getCallable($item): \Closure
     {
-        return [Container::get($item['class']), $item['method']];
+        return fn(...$arg) => Container::get($item['class'])->{$item['method']}(...$arg);
     }
 
 }
