@@ -16,6 +16,9 @@ class ExceptionHandlerParser implements IAnnotationParser
     public static function process(array $item): void
     {
         foreach ((array)$item['parameters']['exceptionClass'] as $exceptionClass) {
+            if(!class_exists($exceptionClass)) {
+                return;
+            }
             $reflectionClass = new ReflectionClass($exceptionClass);
             if (!$reflectionClass->isSubclassOf(Throwable::class)) {
                 throw new \InvalidArgumentException('Exception class must be a subclass of Throwable');
